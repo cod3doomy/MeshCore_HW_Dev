@@ -4,10 +4,6 @@
 #include <helpers/SensorManager.h>
 #include <helpers/sensors/LocationProvider.h>
 
-#ifdef ENV_INCLUDE_BME680
-#include <bsec2.h>
-#endif
-
 class EnvironmentSensorManager : public SensorManager {
 protected:
   int next_available_channel = TELEM_CHANNEL_SELF + 1;
@@ -15,7 +11,6 @@ protected:
   bool AHTX0_initialized = false;
   bool BME280_initialized = false;
   bool BMP280_initialized = false;
-  bool BME680_initialized = false;
   bool INA3221_initialized = false;
   bool INA219_initialized = false;
   bool INA260_initialized = false;
@@ -41,10 +36,6 @@ protected:
   #endif
   #endif
 
-  #if ENV_INCLUDE_BME680
-  static void checkBMEStatus(Bsec2 bsec);
-  static void newDataCallback(const bme68xData data, const bsecOutputs outputs, Bsec2 bsec);
-  #endif
 
 public:
   #if ENV_INCLUDE_GPS
@@ -55,7 +46,7 @@ public:
   #endif
   bool begin() override;
   bool querySensors(uint8_t requester_permissions, CayenneLPP& telemetry) override;
-  #if ENV_INCLUDE_GPS || ENV_INCLUDE_BME680
+  #if ENV_INCLUDE_GPS
   void loop() override;
   #endif
   int getNumSettings() const override;
